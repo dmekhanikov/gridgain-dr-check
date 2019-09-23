@@ -59,8 +59,8 @@ public class DrCheck {
             String addr2 = dataCenters.get(i);
 
             for (String cacheName : caches) {
-                ClientCache<Object, Object> cache1 = client1.cache(cacheName);
-                ClientCache<Object, Object> cache2 = client2.cache(cacheName);
+                ClientCache<Object, Object> cache1 = client1.cache(cacheName).withKeepBinary();
+                ClientCache<Object, Object> cache2 = client2.cache(cacheName).withKeepBinary();
 
                 try {
                     matchContents(cache1, cache2);
