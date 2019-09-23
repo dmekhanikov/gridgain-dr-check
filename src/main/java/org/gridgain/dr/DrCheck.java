@@ -10,6 +10,8 @@ import org.apache.ignite.configuration.ClientConfiguration;
 import org.yaml.snakeyaml.Yaml;
 
 import javax.cache.Cache;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +21,7 @@ public class DrCheck {
     private static final String DATA_CENTERS = "data-centers";
     private static final String CACHES = "caches";
 
-    public static void main(String[] args) throws CacheContentsMismatchException {
+    public static void main(String[] args) throws CacheContentsMismatchException, IOException {
         if (args.length != 1) {
             System.err.println("Invalid number of arguments: " + args.length +
                     "\n\tUsage: " + "java -jar dr-check.jar <PATH TO YAML CONFIG>");
@@ -37,10 +39,11 @@ public class DrCheck {
         new DrCheck().validateConsistency(dataCenters, caches);
     }
 
-    private static Map<String, Object> loadConfiguration(String configPath) {
-        Yaml yaml = new Yaml();
-        InputStream inputStream = DrCheck.class.getClassLoader().getResourceAsStream(configPath);
-        return yaml.load(inputStream);
+    private static Map<String, Object> loadConfiguration(String configPath) throws IOException {
+        try (InputStream inputStream = new FileInputStream(configPath)) {
+            Yaml yaml = new Yaml();
+            return yaml.load(inputStream);
+        }
     }
 
     private void validateConsistency(List<String> dataCenters, List<String> caches) throws CacheContentsMismatchException {
