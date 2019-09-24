@@ -1,3 +1,8 @@
+---
+
 data-centers:
+  - 127.0.0.1:10800
+  - 127.0.0.1:10801
 
 caches:
+  - crossDrCache
